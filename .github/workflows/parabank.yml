@@ -11,7 +11,7 @@ jobs:
               test-tags:
                 - ParaBankRegistration
 
-      uses: ./.github/workflows/maven-test.yml
+      uses: ./.github/workflows/test-templatet.yml
       with:
         scenario-tag: ${{ matrix.test-tags}}
         step-def: "automation.parabank.steps"
