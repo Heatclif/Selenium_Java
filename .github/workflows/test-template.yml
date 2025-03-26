@@ -31,8 +31,8 @@ jobs:
             -D"cucumber.plugin=pretty" \
             -D"cucumber.plugin=summary" \
             -D"cucumber.plugin=junit:target/cucumber-reports/Cucumber.xml,json:target/cucumber-reports/Cucumber.json,message:target/cucumber-reports/Cucumber.ndjson,com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:" \
-            -D"cucumber.glue=${{ input.step-def }}" \
-            -D"cucumber.filter.tags=@${{ input.scenario-tag }}"
+            -D"cucumber.glue=${{ inputs.step-def }}" \
+            -D"cucumber.filter.tags=@${{ inputs.scenario-tag }}"
 
       - name: Upload Test Reports
         if: always()
