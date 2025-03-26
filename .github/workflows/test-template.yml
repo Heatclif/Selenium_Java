@@ -1,0 +1,42 @@
+name: Run Maven Tests
+
+on:
+  workflow_call:
+    inputs:
+      scenario-tag:
+        required: true
+        type: string
+      step-def:
+        required: true
+        type: string
+
+jobs:
+  run_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Run Maven Tests
+        run: |
+          mvn clean test \
+            -D"cucumber.plugin=pretty" \
+            -D"cucumber.plugin=summary" \
+            -D"cucumber.plugin=junit:target/cucumber-reports/Cucumber.xml,json:target/cucumber-reports/Cucumber.json,message:target/cucumber-reports/Cucumber.ndjson,com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:" \
+            -D"cucumber.glue=${{ input.step-def }}" \
+            -D"cucumber.filter.tags=${{ input.scenario-tag }}"
+
+      - name: Upload Test Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-reports
+          path: test-output/

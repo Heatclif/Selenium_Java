@@ -1,4 +1,4 @@
-package core;
+package automation.core;
 
 import java.time.Duration;
 
@@ -7,6 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Base {
@@ -15,7 +16,7 @@ public class Base {
     private final int defaultWait = 10;
 
     public Base() {
-        driver = Driver.getDriver("chrome");
+        driver = Driver.createDriver("chrome");
     }
 
     public WebDriver getDriver() {
@@ -160,7 +161,9 @@ public class Base {
      * 
      * @param locator xpath of the element
      */
-    public void clickElement(String locator) {
+    public void click(
+            String locator
+    ) {
         waitForElementToBeClickable(locator, defaultWait);
         driver.findElement(By.xpath(locator)).click();
     }
@@ -170,7 +173,9 @@ public class Base {
      * 
      * @param locator xpath of the element
      */
-    public void doubleClickElement(String locator) {
+    public void doubleClickElement(
+            String locator
+    ) {
         waitForElementToBeClickable(locator, defaultWait);
         Actions actions = new Actions(driver);
         actions.doubleClick(driver.findElement(By.xpath(locator))).perform();
@@ -181,7 +186,9 @@ public class Base {
      * 
      * @param locator xpath of the element
      */
-    public void hoverOverElement(String locator) {
+    public void hoverOverElement(
+            String locator
+    ) {
         waitForElementToBeVisible(locator, defaultWait);
         Actions actions = new Actions(driver);
         actions.moveToElement(driver.findElement(By.xpath(locator))).perform();
@@ -193,7 +200,10 @@ public class Base {
      * @param locator xpath of the element
      * @param text    text to type
      */
-    public void setValue(String locator, String text) {
+    public void setValue(
+            String locator,
+            String text
+    ) {
         By textField = By.xpath(locator);
         waitForElementToBeVisible(locator, defaultWait);
         driver.findElement(textField).clear();
@@ -201,11 +211,41 @@ public class Base {
     }
 
     /**
+     * Select from dropdown by text
+     * @param locator xpath locator of the dropdown
+     * @param option text value of the option
+     */
+    public void selectFromDropdown(
+            String locator,
+            String option
+    ) {
+        By dropDown = By.xpath(locator);
+        Select dropDownElement = new Select(driver.findElement(dropDown));
+        dropDownElement.selectByVisibleText(option);
+    }
+
+    /**
+     * Select from dropdown by text
+     * @param locator xpath locator of the dropdown
+     * @param option index of the option
+     */
+    public void selectFromDropdown(
+            String locator,
+            int option
+    ) {
+        By dropDown = By.xpath(locator);
+        Select dropDownElement = new Select(driver.findElement(dropDown));
+        dropDownElement.selectByIndex(option);
+    }
+
+    /**
      * Get the text of an element
      * 
      * @param locator xpath of the element
      */
-    public void switchToFrame(String locator) {
+    public void switchToFrame(
+            String locator
+    ) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(defaultWait));
         wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(locator));
     }

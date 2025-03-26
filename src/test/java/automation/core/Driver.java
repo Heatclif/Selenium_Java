@@ -1,18 +1,20 @@
-package core;
+package automation.core;
 
 import java.time.Duration;
+
+import com.titusfortner.logging.SeleniumLogger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 public class Driver {
-    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    private static final ThreadLocal<WebDriver> driver = new ThreadLocal<>();
 
     private Driver() {
         // Private constructor to prevent instantiation
     }
 
-    public static WebDriver getDriver(String browser) {
+    public static WebDriver createDriver(String browser) {
         if (driver.get() == null) {
             switch (browser.toLowerCase()) {
                 case "chrome":
@@ -30,7 +32,12 @@ public class Driver {
 
             // Implicit wait to allow elements to load
             driver.get().manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+            SeleniumLogger.enable("RemoteWebDriver");
         }
+        return getDriver();
+    }
+
+    public static WebDriver getDriver() {
         return driver.get();
     }
 
