@@ -21,8 +21,7 @@ public class Driver {
                     ChromeOptions options = new ChromeOptions();
                     options.addArguments("--start-maximized");
                     options.addArguments("--disable-notifications");
-                    // options.setCapability("webSocketUrl", true);    //Enable BiDi
-                    // options.addArguments("--headless");
+                     options.addArguments("--headless");
 
                     driver.set(new ChromeDriver(options));
                     break;
